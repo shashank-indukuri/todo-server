@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/style.css"],"names":[],"mappings":"AAAA,KACI,oBAAqB,CACrB,gBACJ","file":"main.d13831cc.chunk.css","sourcesContent":[".tab {\n    display: inline-block;\n    margin-left: 25px;\n}"]}
