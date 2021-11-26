@@ -5,6 +5,20 @@ const Todo = require("../models/Todo");
 
 const privateKey = process.env.JWT_PRIVATE_KEY;
 
+router.get("/:todoId", async function (req, res, next) {
+  let todo = await Todo.findOne().where("_id").equals(req.params.todoId).exec();
+  todo = {
+    id: todo._id,
+    title: todo.title,
+    description: todo.description,
+    dateCreated: todo.dateCreated,
+    complete: todo.complete,
+    dateCompleted: todo.dateCompleted,
+    author: todo.author,
+  };
+  return res.status(200).json(todo);
+});
+
 router.use(function (req, res, next) {
   console.log(req.header("Authorization"));
   if (req.header("Authorization")) {
@@ -24,14 +38,14 @@ router.use(function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
   const todos = await Todo.find().where("author").equals(req.payload.id).exec();
-  todosList = todos.map((todo) => ({
+  const todosList = todos.map((todo) => ({
     id: todo._id,
     title: todo.title,
     description: todo.description,
     dateCreated: todo.dateCreated,
     complete: todo.complete,
     dateCompleted: todo.dateCompleted,
-    author: todo.id,
+    author: todo.author,
   }));
   console.log(todosList);
   return res.status(200).json({ todos: todosList });
@@ -44,12 +58,13 @@ router.post("/", async function (req, res) {
     dateCreated: req.body.dateCreated,
     complete: req.body.complete,
     dateCompleted: req.body.dateCompleted,
-    author: req.payload.id,
+    author: req.body.author,
   });
 
   await todo
     .save()
     .then((savedTodo) => {
+      console.log(savedTodo);
       return res.status(201).json({
         id: savedTodo._id,
         title: savedTodo.title,
@@ -81,7 +96,7 @@ router.patch("/", async function (req, res) {
       });
     })
     .catch((error) => {
-      return res.status(500).json({ error: "Unauthorized" });
+      return res.status(500).json({ error: "Unauthorized" + error.message });
     });
 });
 
