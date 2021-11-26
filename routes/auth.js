@@ -65,10 +65,13 @@ router.post("/register", async function (req, res, next) {
       await user
         .save()
         .then((savedUser) => {
-          console.log();
+          const token = jwt.sign({ id: savedUser._id }, privateKey, {
+            algorithm: "RS256",
+          });
           return res.status(201).json({
             id: savedUser._id,
             username: savedUser.username,
+            access_token: token,
           });
         })
         .catch((error) => {

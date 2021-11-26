@@ -15,6 +15,7 @@ router.get("/:todoId", async function (req, res, next) {
     complete: todo.complete,
     dateCompleted: todo.dateCompleted,
     author: todo.author,
+    todoList: todo.todoList,
   };
   return res.status(200).json(todo);
 });
@@ -46,6 +47,7 @@ router.get("/", async function (req, res, next) {
     complete: todo.complete,
     dateCompleted: todo.dateCompleted,
     author: todo.author,
+    todoList: todo.todoList,
   }));
   console.log(todosList);
   return res.status(200).json({ todos: todosList });
@@ -59,6 +61,7 @@ router.post("/", async function (req, res) {
     complete: req.body.complete,
     dateCompleted: req.body.dateCompleted,
     author: req.body.author,
+    todoList: req.body.todoList,
   });
 
   await todo
@@ -73,6 +76,7 @@ router.post("/", async function (req, res) {
         complete: savedTodo.complete,
         dateCompleted: savedTodo.dateCompleted,
         author: savedTodo.author,
+        todoList: savedTodo.todoList,
       });
     })
     .catch((error) => {

@@ -9,6 +9,7 @@ const TodoSchema = new Schema({
   complete: { type: Boolean, required: true },
   dateCompleted: { type: Number },
   author: { type: Schema.Types.ObjectId, ref: "User" },
+  todoList: { type: Schema.Types.ObjectId, ref: "TodoList" },
 });
 
 //Export model
