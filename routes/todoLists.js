@@ -28,13 +28,13 @@ router.get("/", async function (req, res, next) {
     .where("author")
     .equals(req.payload.id)
     .exec();
+
   const todosList = todoLists.map((todoList) => ({
     id: todoList._id,
     title: todoList.title,
     description: todoList.description,
     author: todoList.author,
   }));
-  console.log(todosList);
   return res.status(200).json({ todoLists: todosList });
 });
 
@@ -54,7 +54,6 @@ router.get("/:todoListId", async function (req, res, next) {
     author: todo.author,
     todoList: todo.todoList,
   }));
-
   return res.status(200).json({ todos: todos });
 });
 
@@ -68,7 +67,6 @@ router.post("/", async function (req, res) {
   await todoList
     .save()
     .then((savedTodoList) => {
-      console.log(savedTodoList);
       return res.status(201).json({
         id: savedTodoList._id,
         title: savedTodoList.title,
@@ -86,9 +84,19 @@ router.delete("/", async function (req, res) {
     _id: req.body.id,
   })
     .exec()
-    .then((deletedTodo) => {
-      if (deletedTodo) {
-        return res.status(200).json({ id: req.body.id });
+    .then((deletedList) => {
+      if (deletedList) {
+        Todo.deleteMany({
+          $and: [{ author: req.body.author }, { todoList: req.body.id }],
+        })
+          .exec()
+          .then((deletedTodo) => {
+            if (deletedTodo) {
+              return res.status(200).json({ id: req.body.id });
+            } else {
+              return res.status(500).json({ error: "Unauthorized" });
+            }
+          });
       } else {
         return res.status(500).json({ error: "Unauthorized" });
       }

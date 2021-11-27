@@ -6,6 +6,7 @@ const Todo = require("../models/Todo");
 
 router.get("/", async function (req, res, next) {
   const users = await User.find().exec();
+
   usersList = users.map((user) => ({
     id: user._id,
     username: user.username,
@@ -29,7 +30,6 @@ router.get("/:userId", async function (req, res, next) {
     dateCompleted: todo.dateCompleted,
     author: todo.author,
   }));
-
   return res.status(200).json({ todos: todosList });
 });
 

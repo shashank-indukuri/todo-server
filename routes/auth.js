@@ -27,7 +27,6 @@ router.post("/login", async function (req, res, next) {
       .exec();
 
     if (user) {
-      console.log(user);
       return bcrypt
         .compare(req.body.password, user.password)
         .then((result) => {
@@ -48,7 +47,6 @@ router.post("/login", async function (req, res, next) {
           return res.status(500).json({ error: error.message });
         });
     }
-
     return res.status(401).json({ error: "Invalid credentials." });
   } else {
     return res.status(400).json({ error: "Username or Password Missing" });

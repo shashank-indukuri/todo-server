@@ -21,7 +21,6 @@ router.get("/:todoId", async function (req, res, next) {
 });
 
 router.use(function (req, res, next) {
-  console.log(req.header("Authorization"));
   if (req.header("Authorization")) {
     try {
       req.payload = jwt.verify(req.header("Authorization"), privateKey, {
@@ -39,6 +38,7 @@ router.use(function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
   const todos = await Todo.find().where("author").equals(req.payload.id).exec();
+
   const todosList = todos.map((todo) => ({
     id: todo._id,
     title: todo.title,
@@ -49,7 +49,6 @@ router.get("/", async function (req, res, next) {
     author: todo.author,
     todoList: todo.todoList,
   }));
-  console.log(todosList);
   return res.status(200).json({ todos: todosList });
 });
 
@@ -67,7 +66,6 @@ router.post("/", async function (req, res) {
   await todo
     .save()
     .then((savedTodo) => {
-      console.log(savedTodo);
       return res.status(201).json({
         id: savedTodo._id,
         title: savedTodo.title,
@@ -92,7 +90,6 @@ router.patch("/", async function (req, res) {
   )
     .exec()
     .then((updatedTodo) => {
-      console.log(updatedTodo);
       return res.status(200).json({
         id: updatedTodo._id,
         complete: updatedTodo.complete,
@@ -105,13 +102,11 @@ router.patch("/", async function (req, res) {
 });
 
 router.delete("/", async function (req, res) {
-  console.log(req.body);
   await Todo.findOneAndDelete({
     $and: [{ _id: req.body.id }, { author: req.body.author }],
   })
     .exec()
     .then((deletedTodo) => {
-      console.log(deletedTodo);
       if (deletedTodo) {
         return res.status(200).json({ id: req.body.id });
       } else {
