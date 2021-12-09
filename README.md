@@ -1,6 +1,6 @@
 <h2 align="center">
   To-Do Website server<br/>
-  <a href="https://to-do-mern-stack.herokuapp.com/" target="_blank">Shashank Indukuri | To-Do</a>
+  <a href="https://to-do-mern-stack.herokuapp.com/" target="_blank">To-Do</a>
 </h2>
 
 <br/>
